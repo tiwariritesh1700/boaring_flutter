@@ -1,6 +1,7 @@
 # boaring_flutter
 
 A new Flutter application.
+Its youtube show by flutter team i am follwoing them n maintainig code by episode by episode
 
 ## Getting Started
 
