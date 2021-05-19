@@ -46,8 +46,17 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView(
-        children: article.map(_buildItem).toList(),
+      body: RefreshIndicator(
+        onRefresh: () async{
+          await Future.delayed(Duration(seconds: 1));
+          setState(() {
+            article.removeAt(0);
+          });
+          return;
+        },
+        child: ListView(
+          children: article.map(_buildItem).toList(),
+        ),
       ),
     );
   }
@@ -55,20 +64,27 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildItem(Article article) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: new ListTile(
+      child: new ExpansionTile(
         title: Text(
           article.text,
           style: TextStyle(fontSize: 24.0),
         ),
-        subtitle: Text("${article.commentsCount} comments"),
-        onTap: () async {
-          print("clicked");
-          var fakeURL = "http://${article.domain}";
-          print(fakeURL);
-          await launch(fakeURL);
+        children:<Widget> [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              new Text("${article.commentsCount} comments"),
+              new IconButton(
+                  icon: Icon(Icons.launch),
+                  onPressed: () async {
+                    var fakeURL = "http://${article.domain}";
+                    print(fakeURL);
+                    await launch(fakeURL);
+                  }),
+            ],
+          ),
 
-
-        },
+        ],
       ),
     );
   }
